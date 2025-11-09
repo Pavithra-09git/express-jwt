@@ -196,29 +196,7 @@ router.post("/refresh", async (req, res) => {
   }
 });
 
-// GET a single profile by ID — Only admin can access
-router.get("/profile/:id", verifyToken, async (req, res) => {
-  try {
-    // Ensure only admin can access
-    if (req.profile.role !== "admin") {
-      return res.status(403).json({
-        message: `access denied because you are a ${req.profile.role}`,
-      });
-    }
 
-    const profile = await profiles.findById(
-      req.params.id,
-      "-password -refreshToken"
-    );
-    if (!profile) {
-      return res.status(404).json({ message: "profile not found" });
-    }
-
-    res.status(200).json(profile);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
 
 export default router;
 
